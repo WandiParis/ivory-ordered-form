@@ -1,5 +1,5 @@
 {
-    "name": "egeloen/ordered-form",
+    "name": "wandi/ordered-form",
     "description": "Provides a form ordering support with the Symfony2 form component.",
     "keywords": [ "symfony2", "form", "order" ],
     "license": "MIT",
@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^5.6|^7.0",
-        "symfony/form": "^2.7|^3.0|^4.0"
+        "symfony/form": "^2.7|^3.0|^4.0|^5.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",
