@@ -14,6 +14,92 @@
 The library allows to order your Symfony2 form fields by adding the position option. A position can either be first,
 last or an associative array describing before and/or after field.
 
+## Wandi Note
+
+**Note: this is a Symfony 4 Fork**
+
+If you want to use this Bundle with the Symfony Framework Standard Edition and use the `CreateForm` method in a `Controller` that extends `Symfony\Bundle\FrameworkBundle\Controller\AbstractController`, follow this quick guide:
+
+```yaml
+// config/services.yaml
+Symfony\Component\Form\FormExtensionInterface: "@form.extension"
+```
+
+Before (classic case):
+```php
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class YourController extends AbstractController
+{
+    // [...]
+    
+    public function __construct(/* DI */)
+    {
+        // [...]
+    }
+    
+    public function yourAction(Request $request): Response
+    {
+        $yourEntity = new Entity();
+        
+        $form = $this->createForm(YourType::class, $yourEntity, [
+            // your options
+        ]);
+        $form->handleRequest($request);
+        
+         // [...]
+    }
+}
+```
+
+After:
+```php
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormExtensionInterface;
+use Ivory\OrderedForm\Extension\OrderedExtension;
+use Symfony\Component\Form\Forms;
+use Ivory\OrderedForm\OrderedResolvedFormTypeFactory;
+
+class YourController extends AbstractController
+{
+    /**
+     * @var FormExtensionInterface
+     */
+    private $formExtension;
+    
+    public function __construct(FormExtensionInterface $formExtension)
+    {
+        $this->formExtension = $formExtension;
+    }
+    
+    public function yourAction(Request $request): Response
+    {
+        $yourEntity = new Entity();
+        
+        $formFactory = Forms::createFormFactoryBuilder()
+            ->setResolvedTypeFactory(new OrderedResolvedFormTypeFactory())
+            ->addExtension($this->formExtension)
+            ->addExtension(new OrderedExtension())
+            ->getFormFactory();
+        $form = $formFactory->create(YourType::class, $yourEntity, [
+            // your options
+        ]);
+        $form->handleRequest($request);
+        
+         // [...]
+    }
+}
+```
+
+
 ## Documentation
 
  1. [Installation](/doc/installation.md)
