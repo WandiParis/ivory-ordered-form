@@ -1,5 +1,5 @@
 {
-    "name": "egeloen/ordered-form",
+    "name": "wandi/ordered-form",
     "description": "Provides a form ordering support with the Symfony2 form component.",
     "keywords": [ "symfony2", "form", "order" ],
     "license": "MIT",
